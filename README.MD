@@ -3,6 +3,7 @@
 на 2023.05 только возможность использовани€ 8.3.23 версии в EDT 2022.2.5
 
 1.”становка скопировать релизный jar в папку dropins EDT
-2.«апустить edt.exe -console
-3.выполнить в консоли lb
-4.выполнить в консоли sta dev.etsys.patch
+2.ƒобавить в 1cedt.ini в конец "-Dosgi.framework.extensions=org.eclipse.equinox.weaving.hook"
+3.«апустить edt.exe -console
+4.выполнить в консоли lb
+5.выполнить в консоли sta dev.etsys.patch
