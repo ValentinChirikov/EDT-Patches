@@ -51,7 +51,7 @@ tasks.register("manifestBundle") {
     dependsOn(tasks.jar)
     doLast {
         val configs = project.configurations.getByName("archives").outgoing
-        var publication = configs.artifacts.first { it.type == ArtifactTypeDefinition.JAR_TYPE }
+        val publication = configs.artifacts.first { it.type == ArtifactTypeDefinition.JAR_TYPE }
 
         val analyzer = aQute.bnd.osgi.Analyzer()
 
@@ -59,9 +59,9 @@ tasks.register("manifestBundle") {
 
         // настройки для manifest
         analyzer.setProperty("Bundle-SymbolicName", "dev.etsys.patch")
-        analyzer.setProperty("Export-Package", "dev.etsys.patch, dev.etsys.patch.edt")
+        analyzer.setProperty("Export-Package", "dev.etsys.patch, dev.etsys.patch.aspects")
         analyzer.setProperty("Import-Package", "org.aspectj.runtime.internal, *")
-        analyzer.setProperty("Bundle-Version", "1.0.5")
+        analyzer.setProperty("Bundle-Version", "1.0.8")
 
         // расчет манифеста
         val manifest = analyzer.calcManifest()
@@ -73,9 +73,9 @@ tasks.register("manifestBundle") {
         val jarFile = URI.create("jar:" + publication.file.toURI())
 
         // создать jar фс
-        var jarFS = FileSystems.newFileSystem(jarFile, jarProperties, this.javaClass.classLoader)
+        val jarFS = FileSystems.newFileSystem(jarFile, jarProperties, this.javaClass.classLoader)
         // пусть к манифесту внутри jar
-        var manifestJarPath = jarFS.getPath("META-INF/MANIFEST.MF");
+        val manifestJarPath = jarFS.getPath("META-INF/MANIFEST.MF")
 
         val pis = PipedInputStream()
         val pos = PipedOutputStream(pis)
@@ -103,9 +103,9 @@ tasks.register("deployBundle") {
     dependsOn(tasks["manifestBundle"])
     doLast {
         val configs = project.configurations.getByName("archives").outgoing
-        var publication = configs.artifacts.first { it.type == ArtifactTypeDefinition.JAR_TYPE }
+        val publication = configs.artifacts.first { it.type == ArtifactTypeDefinition.JAR_TYPE }
 
-        val jarFile = URI.create("jar:" + publication.file.toURI())
+//        val jarFile = URI.create("jar:" + publication.file.toURI())
         Files.copy(publication.file.toPath(),
             File(edtDropinsPath + "\\" + publication.file.name).toPath(),
             StandardCopyOption.REPLACE_EXISTING)

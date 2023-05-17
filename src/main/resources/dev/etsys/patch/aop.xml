@@ -1,12 +1,12 @@
 <aspectj>
     <aspects>
         <aspect name="dev.etsys.patch.aspects.ApiResolveDebugHttpClientAspect"/>
-<!--        <aspect name="edt.org.aspectj.weaver.loadtime.XmlVersionRegistryAspect"/>-->
         <aspect name="dev.etsys.patch.aspects.XmlVersionServiceAspect"/>
+        <!--        <aspect name="edt.org.aspectj.weaver.loadtime.XmlVersionRegistryAspect"/>-->
         <weaver options="-verbose -showWeaveInfo">
             <include within="com._1c.g5.v8.dt.internal.debug.core.runtime.client.ApiResolveDebugHttpClient"/>
-<!--            <include within="com._1c.g5.v8.dt.internal.xml.XmlVersionRegistry"/>-->
             <include within="com._1c.g5.v8.dt.internal.xml.XmlVersionService"/>
+            <!--            <include within="com._1c.g5.v8.dt.internal.xml.XmlVersionRegistry"/>-->
         </weaver>
     </aspects>
 </aspectj>

@@ -21,7 +21,7 @@ public class Hook implements WeavingHook {
             "*"
     );
 
-    final Set<String> wovenClasses = new HashSet<>();
+    final Set<CompositeKey> wovenClasses = new HashSet<>();
 
     // закешируем адаптеры, если нужно шить несколько классов в одном пакете
     private final Map<ClassLoader, ClassLoaderWeavingAdaptor> adapters = new HashMap<>();
@@ -45,13 +45,37 @@ public class Hook implements WeavingHook {
 
                 wovenClass.getDynamicImports().addAll(dynamicImports);
                 wovenClass.setBytes(weavingAdaptor.weaveClass(wovenClassClassName, wovenClass.getBytes()));
-                wovenClasses.add(wovenClassClassName);
+
+                wovenClasses.add(new CompositeKey(wovenClassClassName, wovenClassloader));
+
             } catch (Exception  e ) {
                 System.err.println(e);
-
             }
         }
 
     }
 
+    class CompositeKey {
+        private final String className;
+        private final ClassLoader  classLoader;
+
+        CompositeKey(String className, ClassLoader classLoader) {
+            this.className = className;
+            this.classLoader = classLoader;
+        }
+
+        @Override
+        public int hashCode() {
+            return className.hashCode() ^ classLoader.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj instanceof CompositeKey) {
+                return ((CompositeKey) obj).classLoader.equals(classLoader) && ((CompositeKey) obj).className.equals(className);
+            } else {
+                return false;
+            }
+        }
+    }
 }
